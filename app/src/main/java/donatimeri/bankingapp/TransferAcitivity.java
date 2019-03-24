@@ -14,6 +14,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class TransferAcitivity extends AppCompatActivity {
+    final static String transferTitle="Transfer your money";
+    final static String srecipient="recipient";
+    final static String samount="amount";
+    final static String sfailure="Amount is outside of bounds";
 
     private Money currAmount;
     public ArrayList<String> recipientList;
@@ -28,7 +32,7 @@ public class TransferAcitivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transfer);
-        setTitle("Transfer your money");
+        setTitle(transferTitle);
 
         btnPay=(Button)findViewById(R.id.btn_pay);
         spnRecipient=(Spinner) findViewById(R.id.lst_recipient);
@@ -38,13 +42,13 @@ public class TransferAcitivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        recipientList = intent.getStringArrayListExtra("recipients");
+        recipientList = intent.getStringArrayListExtra(MainActivity.srecipients);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, recipientList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnRecipient.setAdapter(adapter);
 
-        currAmount= (Money) intent.getSerializableExtra("currAmount");
+        currAmount= (Money) intent.getSerializableExtra(MainActivity.scurrAmount);
 
 
         txtAmount.addTextChangedListener(new TextWatcher() {
@@ -73,8 +77,8 @@ public class TransferAcitivity extends AppCompatActivity {
                 String recipient=spnRecipient.getSelectedItem().toString();
 
                 Intent returnIntent=new Intent();
-                returnIntent.putExtra("recipient", recipient);
-                returnIntent.putExtra("amount",amount);
+                returnIntent.putExtra(srecipient, recipient);
+                returnIntent.putExtra(samount,amount);
                 setResult(RESULT_OK, returnIntent);
                 finish();
             }
@@ -84,7 +88,7 @@ public class TransferAcitivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent lunchIntent=new Intent(TransferAcitivity.this, AddRecipient.class);
-                lunchIntent.putExtra("recipients", recipientList);
+                lunchIntent.putExtra(MainActivity.srecipients, recipientList);
                 startActivityForResult(lunchIntent, RC_ADD_RECIPIENT);
             }
         });
@@ -97,7 +101,7 @@ public class TransferAcitivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             if (requestCode==RC_ADD_RECIPIENT){
-                recipientList=data.getStringArrayListExtra("recipient");
+                recipientList=data.getStringArrayListExtra(srecipient);
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                         this, android.R.layout.simple_spinner_item, recipientList);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -125,7 +129,7 @@ public class TransferAcitivity extends AppCompatActivity {
         }
         else{
             btnPay.setEnabled(false);
-            lblCheck.setText("Amount is outside of bounds");
+            lblCheck.setText(sfailure);
             btnPay.setBackgroundColor(getResources().getColor(R.color.darkGrey));
 
         }

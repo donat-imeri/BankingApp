@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class TransactionActivity extends AppCompatActivity {
+    final static String transactionTitle="Transactions History";
+
 
     private ArrayList<String> dateArray=new ArrayList<>();
     private ArrayList<String> recipientArray=new ArrayList<>();
@@ -23,10 +25,10 @@ public class TransactionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
-        setTitle("Transactions History");
+        setTitle(transactionTitle);
 
         Intent intent=getIntent();
-        dataTransactions= (List<DataClass>) intent.getSerializableExtra("dataTransactions");
+        dataTransactions= (List<DataClass>) intent.getSerializableExtra(MainActivity.sdataTransactions);
 
         for (DataClass d: dataTransactions) {
             dateArray.add(d.dateArray);

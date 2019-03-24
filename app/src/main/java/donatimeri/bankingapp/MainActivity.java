@@ -16,6 +16,14 @@ import java.util.List;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
+    public final static String sdataTransactions="dataTransactions";
+    public final static String ssuccesful="Transfer Done";
+    public final static String srandomInt="randomInt";
+    public final static String ownerName="Donat Imeri";
+    public final static String srecipients="recipients";
+    public final static String scurrAmount="currAmount";
+
+
     private TextView lbl_balance;
     private Button btn_transactions;
     private Button btn_transfer;
@@ -39,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         btn_transactions=(Button) findViewById(R.id.btn_transactions);
         btn_transfer=(Button) findViewById(R.id.btn_transfer);
 
-        String ownerName="Donat Imeri";
+
         transactionList.add(new DataClass(formatTime.format(cal.getTime()), ownerName, randomMoney,randomMoney));
         lbl_balance.setText(randomMoney.toString());
 
@@ -55,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent lunchIntent=new Intent(MainActivity.this, TransactionActivity.class);
-                lunchIntent.putExtra("dataTransactions", (Serializable) transactionList);
+                lunchIntent.putExtra(sdataTransactions, (Serializable) transactionList);
                 startActivity(lunchIntent);
             }
         });
@@ -64,8 +72,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent lunchIntent=new Intent(MainActivity.this, TransferAcitivity.class);
-                lunchIntent.putExtra("recipients", recipients);
-                lunchIntent.putExtra("currAmount", randomMoney);
+                lunchIntent.putExtra(srecipients, recipients);
+                lunchIntent.putExtra(scurrAmount, randomMoney);
                 startActivityForResult(lunchIntent, RC_TRANSFER);
             }
         });
@@ -78,12 +86,12 @@ public class MainActivity extends AppCompatActivity {
         try {
             if (requestCode==RC_TRANSFER){
 
-                String recipient=data.getStringExtra("recipient");
-                Money amountTransfered= (Money) data.getSerializableExtra("amount");
+                String recipient=data.getStringExtra(TransferAcitivity.srecipient);
+                Money amountTransfered= (Money) data.getSerializableExtra(TransferAcitivity.samount);
 
                 randomMoney=Money.sub(randomMoney, amountTransfered);
                 lbl_balance.setText(randomMoney.toString());
-                Toast.makeText(this, "Transfer Done", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, ssuccesful, Toast.LENGTH_LONG).show();
 
                 cal=Calendar.getInstance();
                 transactionList.add(new DataClass(formatTime.format(cal.getTime()), recipient, amountTransfered, randomMoney));
@@ -98,16 +106,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("randomInt",randomMoney);
-        outState.putSerializable("dataTransactions",(Serializable) transactionList);
+        outState.putSerializable(srandomInt,randomMoney);
+        outState.putSerializable(sdataTransactions,(Serializable) transactionList);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        randomMoney= (Money) savedInstanceState.getSerializable("randomInt");
+        randomMoney= (Money) savedInstanceState.getSerializable(srandomInt);
         lbl_balance.setText(randomMoney.toString());
-        transactionList= (List<DataClass>) savedInstanceState.getSerializable("dataTransactions");
+        transactionList= (List<DataClass>) savedInstanceState.getSerializable(sdataTransactions);
     }
 
 }

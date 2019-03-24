@@ -23,6 +23,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private ArrayList<String> acutalValueArray=new ArrayList<>();
     private Context context;
     private View lastSelected;
+    private boolean selected;
 
     public RecyclerViewAdapter(Context context, ArrayList<String> dateArray, ArrayList<String> recipientArray, ArrayList<String> amountTransferedArray, ArrayList<String> acutalValueArray) {
         this.dateArray=dateArray;
@@ -31,6 +32,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.acutalValueArray=acutalValueArray;
         this.context=context;
         lastSelected=null;
+        selected=false;
     }
 
 
@@ -52,16 +54,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getBackground()==null) {
-                    if (lastSelected!=null) {
-                        lastSelected.setBackground(null);
+                    if (lastSelected!=null && selected) {
+                        lastSelected.setBackgroundColor(Color.parseColor("#ceffe4"));
+                        selected=false;
                     }
-                    lastSelected=v;
-                    v.setBackgroundColor(Color.rgb(216, 231, 255));
-                }
-                else{
-                    v.setBackground(null);
-                }
+                    else {
+                        lastSelected = v;
+                        v.setBackgroundColor(Color.rgb(216, 231, 255));
+                        selected=true;
+                    }
+
+                    if (lastSelected!=v){
+                        lastSelected = v;
+                        v.setBackgroundColor(Color.rgb(216, 231, 255));
+                        selected=true;
+                    }
             }
 
         });
