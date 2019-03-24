@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">BankingApp</string>
+    <string-array name="recipients">
+        <item>Szymon Judkowiak</item>
+        <item>Gentiana Kastrati</item>
+        <item>Jan Eric</item>
+        <item>Lara Raffel</item>
+        <item>Festim Prebreza</item>
+        <item>Joakim Berg</item>
+        <item>Bernhard Brunner</item>
+    </string-array>
+</resources>
